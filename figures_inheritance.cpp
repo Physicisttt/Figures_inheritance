@@ -13,7 +13,6 @@ enum figure_list
 	Last
 };
 
-
 class BoundingRectangle
 {
 public:
@@ -21,6 +20,17 @@ public:
 	double y2 = 0;//y_topleft
 	double x2 = 0;//x_downright
 	double y1 = 0;//y_downright
+
+	BoundingRectangle()
+	{}
+
+	BoundingRectangle(double new_x1, double new_x2, double new_y1, double new_y2)
+	{
+		x1 = new_x1;
+		x2 = new_x2;
+		y1 = new_y1;
+		y2 = new_y2;
+	}
 
 	void printBoundingRectangle()
 	{
@@ -51,7 +61,8 @@ public:
 	virtual BoundingRectangle getBoundingRect()
 	{
 		cout << "not implemented!" << endl;
-		//return what? here must be smth
+
+		return BoundingRectangle(0, 0, 0, 0);
 	}
 };
 
@@ -98,9 +109,9 @@ public:
 		return getLength() * getWidth();
 	}
 
-	Rectangle getBoundingRect()
+	BoundingRectangle getBoundingRect()
 	{
-		return *this;
+		return BoundingRectangle(x1, x2, y1, y2);
 	}
 
 	void setCoordinates(double x_topleft, double y_topleft, double x_downright, double y_downright)//setX & setY
@@ -129,28 +140,22 @@ public:
 class Circle : public Figure
 {
 public:
-	double x_centre;
-	double y_centre;
-	double radius;
+	double x_centre = 0;
+	double y_centre = 0;
+	double radius = 0;
 
-	Rectangle getBoundingRect()
+	BoundingRectangle getBoundingRect()
 	{
-		Rectangle R;
-
 		//x1 ---> x_topleft
-		//y2 ---> y_topleft
 		//x2 ---> x_downright
 		//y1 ---> y_downright
-
-		//x1 y2
-		R.x1 = x_centre - radius;
-		R.y2 = y_centre + radius;
-
-		//x2 y2
-		R.x2 = x_centre + radius;
-		R.y1 = y_centre - radius;
-
-		return R;
+		//y2 ---> y_topleft
+		
+		return BoundingRectangle(
+					x_centre - radius,
+					x_centre + radius,
+					y_centre - radius,
+					y_centre + radius);
 	}
 
 	double getX_Centre()
@@ -202,11 +207,11 @@ public:
 class Hexagon : public Figure
 {
 public:
-	double x_centre;//HOW ?????
-	double y_centre;//HOW ?????
-	double sRadius;
-	double bRadius;
-	double length;
+	double x_centre = 0;//HOW ?????
+	double y_centre = 0;//HOW ?????
+	double sRadius = 0;
+	double bRadius = 0;
+	double length = 0;
 	//bRadius == length
 
 	double getX_Centre()
@@ -239,19 +244,13 @@ public:
 		return ((3 * sqrt(3) * pow(length, 2)) / (2));
 	}
 
-	Rectangle getBoundingRect()
+	BoundingRectangle getBoundingRect()
 	{
-		Rectangle R;
-
-		//x1 y1
-		R.x1 = x_centre - sRadius;
-		R.y1 = y_centre + bRadius;
-
-		//x2 y2
-		R.x2 = x_centre + sRadius;
-		R.y2 = y_centre - bRadius;
-
-		return R;
+		return BoundingRectangle(
+			x_centre - sRadius,
+			x_centre + sRadius,
+			y_centre + bRadius,
+			y_centre - bRadius);
 	}
 
 	void setCoordinates(double x_in, double y_in)
