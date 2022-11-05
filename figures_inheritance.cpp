@@ -13,26 +13,55 @@ enum figure_list
 	Last
 };
 
+
+class BoundingRectangle
+{
+public:
+	double x1 = 0;//x_topleft
+	double y2 = 0;//y_topleft
+	double x2 = 0;//x_downright
+	double y1 = 0;//y_downright
+
+	void printBoundingRectangle()
+	{
+		cout << "bounding rectangle: " << endl
+			<< "x1 = " << x1 << " y1 = " << y1 << endl
+			<< "x2 = " << x2 << " y2 = " << y2 << endl;
+	}
+};
+
 class Figure
 {
 public:
 	int type_id = 0;
 
-	//virtual void print() = 0; - conflict with "vector<Figure> Scene"
+	virtual void print() = 0;
 
-	virtual void print()
+	/*virtual void print()
 	{
 		cout << "print Figure!" << endl;
+	}*/
+
+	virtual double getSquare()
+	{
+		cout << "print Figure!" << endl;
+		return 0;
+	}
+
+	virtual BoundingRectangle getBoundingRect()
+	{
+		cout << "not implemented!" << endl;
+		//return what? here must be smth
 	}
 };
 
 class Rectangle : public Figure
 {
 public:
-	double x1;//x_topleft
-	double y2;//y_topleft
-	double x2;//x_downright
-	double y1;//y_downright
+	double x1 = 0;//x_topleft
+	double y2 = 0;//y_topleft
+	double x2 = 0;//x_downright
+	double y1 = 0;//y_downright
 
 	double getX1()
 	{
