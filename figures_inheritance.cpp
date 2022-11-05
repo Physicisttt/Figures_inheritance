@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -16,6 +17,13 @@ class Figure
 {
 public:
 	int type_id = 0;
+
+	//virtual void print() = 0; - conflict with "vector<Figure> Scene"
+
+	virtual void print()
+	{
+		cout << "print Figure!" << endl;
+	}
 };
 
 class Rectangle : public Figure
@@ -75,6 +83,13 @@ public:
 	}
 
 	void print_rec()
+	{
+		cout << "bounding rectangle: " << endl
+			<< "x1 = " << x1 << " y1 = " << y1 << endl
+			<< "x2 = " << x2 << " y2 = " << y2 << endl;
+	}
+
+	void print()
 	{
 		cout << "bounding rectangle: " << endl
 			<< "x1 = " << x1 << " y1 = " << y1 << endl
@@ -141,6 +156,13 @@ public:
 	}
 
 	void printCircle()
+	{
+		cout << "CIRCLE" << endl;
+		cout << "Radius: " << radius << endl;
+		cout << "x: " << x_centre << " y: " << y_centre << endl;
+	}
+
+	void print()
 	{
 		cout << "CIRCLE" << endl;
 		cout << "Radius: " << radius << endl;
@@ -228,9 +250,33 @@ public:
 	{
 		cout << "HEXAGON" << endl;
 	}
+
+	void print()
+	{
+		cout << "HEXAGON" << endl;
+	}
 };
 
 int main(void)
 {
+	vector<Figure*> Scene;
+
+	Scene.resize(5);
+
+	Circle Cir1;
+	Cir1.radius = 3;
+	Cir1.setCoordinates(1, 5);
+
+	Figure* F1;
+	F1 = &Cir1;
+	Scene[0] = F1;
+
+	cout << "virtual print test" << endl;
+	F1->print();
+	Scene[0]->print();
+
+	
+	
+
 	return 1;
 }
