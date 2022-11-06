@@ -309,7 +309,7 @@ Figure* createCircle()
 	int right = 20;
 
 	//min and max value of radius
-	int rad_min = 1;
+	int rad_min = 2;
 	int rad_max = 7;
 
 	Circle* newCircle = new Circle;
@@ -374,6 +374,63 @@ Figure* createFigure()
 	return nullptr;
 }
 
+bool intersection(const BoundingRectangle a, const BoundingRectangle b)
+{
+	double ax1 = a.x1;
+	double ay1 = a.y1;
+	double ax2 = a.x2;
+	double ay2 = a.y2;
+
+	double bx1 = b.x1;
+	double by1 = b.y1;
+	double bx2 = b.x2;
+	double by2 = b.y2;
+
+
+	// ax2 < bx1 ---> no intersection on X
+	// bx2 < ax1 ---> no intersection on X
+	// ay2 < by1 ---> no intersection on Y
+	// by2 < ay1 ---> no intersection on Y
+
+	// (ax2 < bx1) || (bx2 < ax1) ---> no intersection on X
+	// (ay2 < by1) || (by2 < ay1) ---> no intersection on Y
+
+	//(no X) || (no Y) ---> no intersection
+	//( (ax2 < bx1) || (bx2 < ax1) ) || ( (ay2 < by1) || (by2 < ay1) ) ---> no intersection
+
+	if (((ax2 < bx1) || (bx2 < ax1)) || ((ay2 < by1) || (by2 < ay1)))
+	{
+		return false;// no intersection
+	}
+	else
+	{
+		return true;// intersection
+	}
+}
+
+bool Scene_Intersection(Figure* f, vector<Figure*>& scene)
+{
+	for (int i = 0; i < scene.size(); i++)
+	{
+		if (scene[i] != nullptr)//not empty figure
+		{
+			Figure* oldFigure = scene[i];
+			if (intersection(f->getBoundingRect(), oldFigure->getBoundingRect()))
+			{
+				return true;
+			}
+		}
+		else//empty figure ---> no intersection
+		{
+
+		}
+	}
+
+	return false;
+	//return true; //intersection
+	//return false; // no intersection
+}
+
 void printFigure(Figure* f)
 {
 	f->print();
@@ -381,14 +438,23 @@ void printFigure(Figure* f)
 
 void fillScene(vector<Figure*>& scene)
 {
-	Figure* newFigure = createFigure();
-
-	for (int i = 0; i < scene.size(); i++)
+	int i = -1;
+	int attempts = 0;
+	while (attempts <= 100)
 	{
-		std::cout << "created figure " << i << endl;
-		scene[i] = createFigure();
+		attempts++;
+
+		Figure* newFigure = createFigure();
+		if (!Scene_Intersection(newFigure, scene))
+		{
+			i++;
+			cout << "succesfully created figure " << i << " on " << attempts << " attempt" << endl;
+			scene.resize(i + 1);
+			scene[i] = newFigure;
+
+			attempts = 0;
+		}
 	}
-	
 }
 
 void printScene(vector<Figure*>& scene)
@@ -397,6 +463,7 @@ void printScene(vector<Figure*>& scene)
 	{
 		cout << "Figure " << i << " is ";
 		printFigure(scene[i]);
+		cout << endl;
 	}
 }
 
@@ -404,7 +471,8 @@ int main(void)
 {
 	vector<Figure*> Scene;
 
-	Scene.resize(5);
+/*
+	//Scene.resize(5);
 
 	Circle Cir1;
 	Cir1.radius = 3;
@@ -414,27 +482,28 @@ int main(void)
 	F1 = &Cir1;
 	Scene[0] = F1;
 
-	cout << "virtual print test" << endl;
-	F1->print();
-	Scene[0]->print();
+	Circle Cir2;
+	Cir2.radius = 4;
+	Cir2.setCoordinates(10,15);
 
-
-	cout << "this is createFigure test" << endl << endl;
 	Figure* F2;
-	for (int i = 0; i < 5; i++)
-	{
-		F2 = createFigure();
-		F2->print();
-		cout << endl;
-	}
+	F2 = &Cir2;
+	Scene[1] = F2;
+*/
+//////////////////////////////////////////////////////////////////////////////////////////
 
 	cout << "\nthis is fillScene test\n" << endl;
 
+	//fillScene1(Scene);
 	fillScene(Scene);
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 	cout << "\nthis is printScene test\n" << endl;
 	
 	printScene(Scene);
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
 	return 1;
 }
