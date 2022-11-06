@@ -96,7 +96,7 @@ public:
 
 	double getWidth()
 	{
-		return y1 - y2;
+		return y2 - y1;
 	}
 
 	double getSquare()
@@ -467,12 +467,29 @@ void printScene(vector<Figure*>& scene)
 	}
 }
 
+double GetSquare(Figure* f)
+{
+	return f->getSquare();
+}
+
+double TotalSquareUsed(vector<Figure*>& scene)
+{
+	double TotalSquare = 0;
+
+	for (int i = 0; i < scene.size(); i++)
+	{
+		TotalSquare += GetSquare(scene[i]);
+	}
+
+	return TotalSquare;
+}
+
 int main(void)
 {
 	vector<Figure*> Scene;
 
 /*
-	//Scene.resize(5);
+	Scene.resize(2);
 
 	Circle Cir1;
 	Cir1.radius = 3;
@@ -489,6 +506,18 @@ int main(void)
 	Figure* F2;
 	F2 = &Cir2;
 	Scene[1] = F2;
+
+	Rectangle Rec1;
+	Rec1.setCoordinates(2, 5, 7, 1);
+	Figure* F3;
+	F3 = &Rec1;
+	cout << "\nRectangle Square test\n" << endl;
+	F3->print();
+	cout << "Square: " << F3->getSquare() << endl;
+
+	cout << "figure 0 square: " << Scene[0]->getSquare() << endl;
+	cout << "figure 1 square: " << Scene[1]->getSquare() << endl;
+	cout << "Total Square: " << TotalSquareUsed(Scene) << endl;
 */
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -503,6 +532,11 @@ int main(void)
 	
 	printScene(Scene);
 
+//////////////////////////////////////////////////////////////////////////////////////////
+ 
+	cout << "\nthis is TotalSquareUsed test\n" << endl;
+
+	cout << "Total Square = " << TotalSquareUsed(Scene);
 
 //////////////////////////////////////////////////////////////////////////////////////////
 	return 1;
