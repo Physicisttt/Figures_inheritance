@@ -374,6 +374,32 @@ Figure* createFigure()
 	return nullptr;
 }
 
+void printFigure(Figure* f)
+{
+	f->print();
+}
+
+void fillScene(vector<Figure*>& scene)
+{
+	Figure* newFigure = createFigure();
+
+	for (int i = 0; i < scene.size(); i++)
+	{
+		std::cout << "created figure " << i << endl;
+		scene[i] = createFigure();
+	}
+	
+}
+
+void printScene(vector<Figure*>& scene)
+{
+	for (int i = 0; i < scene.size(); i++)
+	{
+		cout << "Figure " << i << " is ";
+		printFigure(scene[i]);
+	}
+}
+
 int main(void)
 {
 	vector<Figure*> Scene;
@@ -401,8 +427,14 @@ int main(void)
 		F2->print();
 		cout << endl;
 	}
+
+	cout << "\nthis is fillScene test\n" << endl;
+
+	fillScene(Scene);
+
+	cout << "\nthis is printScene test\n" << endl;
 	
-	
+	printScene(Scene);
 
 	return 1;
 }
