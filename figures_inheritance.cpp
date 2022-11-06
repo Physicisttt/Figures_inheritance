@@ -3,6 +3,11 @@
 
 using namespace std;
 
+int random_int(int left_border, int right_border)
+{
+	return left_border + rand() % (right_border - left_border + 1);
+}
+
 enum figure_list
 {
 	Empty = 0,
@@ -25,12 +30,7 @@ public:
 	{}
 
 	BoundingRectangle(double new_x1, double new_x2, double new_y1, double new_y2)
-	{
-		x1 = new_x1;
-		x2 = new_x2;
-		y1 = new_y1;
-		y2 = new_y2;
-	}
+		: x1(new_x1), x2(new_x2), y1(new_y1), y2(new_y2){}
 
 	void printBoundingRectangle()
 	{
@@ -47,14 +47,9 @@ public:
 
 	virtual void print() = 0;
 
-	/*virtual void print()
-	{
-		cout << "print Figure!" << endl;
-	}*/
-
 	virtual double getSquare()
 	{
-		cout << "print Figure!" << endl;
+		cout << "not implemented!" << endl;
 		return 0;
 	}
 
@@ -131,7 +126,7 @@ public:
 
 	void print()
 	{
-		cout << "bounding rectangle: " << endl
+		cout << "RECTANGLE: " << endl
 			<< "x1 = " << x1 << " y1 = " << y1 << endl
 			<< "x2 = " << x2 << " y2 = " << y2 << endl;
 	}
@@ -285,6 +280,100 @@ public:
 	}
 };
 
+Figure* createRectangle()
+{
+	// random number in [left, right]
+	int left = 1;
+	int right = 20;
+
+	Rectangle* newRectangle = new Rectangle;
+
+	newRectangle->x1 = random_int(left, right);
+	newRectangle->y1 = random_int(left, right);
+	int len = random_int(left, right);
+	int wid = random_int(left, right);
+	newRectangle->x2 = newRectangle->x1 + len;
+	newRectangle->y2 = newRectangle->y1 + wid;
+
+	Figure* newFigure;
+	newFigure = newRectangle;
+	newFigure->type_id = figure_list::Rect;
+
+	return newFigure;
+}
+
+Figure* createCircle()
+{
+	// random number in [left, right]
+	int left = 3;
+	int right = 20;
+
+	//min and max value of radius
+	int rad_min = 1;
+	int rad_max = 7;
+
+	Circle* newCircle = new Circle;
+	newCircle->radius = random_int(rad_min, rad_max);
+	newCircle->setCoordinates(random_int(left, right), random_int(left, right));
+
+	Figure* newFigure;
+	newFigure = newCircle;
+	newFigure->type_id = figure_list::Circ;
+
+	return newFigure;
+}
+
+Figure* createHexagon()
+{
+	// random number in [left, right]
+	int left = 1;
+	int right = 20;
+
+	//how should I describe hexagon?
+
+	Hexagon* newHexagon = new Hexagon;
+	//filling hexagon
+
+
+	Figure* newFigure;
+	newFigure = newHexagon;
+	newFigure->type_id = figure_list::Hex;
+
+	return newFigure;
+}
+
+Figure* createFigure()
+{
+	int type = random_int(figure_list::Circ, figure_list::Rect);
+
+	switch (type)
+	{
+	case figure_list::Circ:
+	{
+		return createCircle();
+		break;
+	}
+
+	case figure_list::Rect:
+	{
+		return createRectangle();
+		break;
+	}
+
+	case figure_list::Hex:
+	{
+		return createHexagon();
+		break;
+	}
+
+	default:
+		//cout << "createFigure error!" << endl;
+		break;
+	}
+
+	return nullptr;
+}
+
 int main(void)
 {
 	vector<Figure*> Scene;
@@ -303,6 +392,15 @@ int main(void)
 	F1->print();
 	Scene[0]->print();
 
+
+	cout << "this is createFigure test" << endl << endl;
+	Figure* F2;
+	for (int i = 0; i < 5; i++)
+	{
+		F2 = createFigure();
+		F2->print();
+		cout << endl;
+	}
 	
 	
 
